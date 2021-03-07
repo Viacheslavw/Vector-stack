@@ -8,6 +8,7 @@ public:
     
   
     Vector(){ 
+        std::cout << "const";
         pointer = new T[this->capacity];
     }
     template<class T1>
@@ -35,24 +36,34 @@ public:
                 {
                     this->pointer[i] = copy.pointer[i];
                 }
+            return *this;
             }
-        Vector& operator=(const Vector& copy) {
-            
-            pointer = new T[copy.capacity];
+    Vector(Vector&& move)noexcept {
+        this->pointer = move.pointer;
+        this->size = move.size;
+        this->capacity = move.capacity;
+        move.pointer = nullptr;
+        return *this;
+    }
+
+    Vector& operator=(const Vector& copy) {
+        pointer = new T[copy.capacity];
             for (decltype(size) i = 0; i < size; ++i)
             {
                 this->pointer[i] = copy.pointer[i];
             }
-        }
-
-       
-
-
+            return *this;
+    }
+    Vector& operator=(Vector&& move) noexcept {
+        this->pointer = move.pointer;
+        this->size = move.size;
+        this->capacity = move.capacity;
+        move.pointer = nullptr;
+        return *this;
+    }
         ~Vector() {
             delete[] pointer;
         }
-
-
 
         void push_back(T value) {
             if (capacity == 0)
@@ -205,17 +216,18 @@ public:
             return it;
            
         }
-        T* erase(T* pos) {
+        T erase(T* pos) {
+            
+            T it = *pointer;
 
-            T* it = pointer;
-
-            if (pos )
+            if (pos==0 )
                 return it;
             for (decltype(size) i = 0; i < size; ++i) {
                 if (pos == (pointer + i)) {
-                    it = &pointer[i];
+                    it = pointer[i];
                     for (; i < size && (i - 1) != size; ++i)
                         pointer[i] = pointer[i + 1];
+
                 }
             }
             --size;
@@ -235,12 +247,9 @@ public:
             std::cout << "size  " << nsize << "  "  << std::endl;
          
             for (decltype(size) i = 0; i < size; ++i) {
-                std::cout << begin<<"  /// "<< &pointer[i]<<"   ||"<<std::endl;
                 if (begin == (pointer + i)) {
-                    for (;  end < &pointer[size]; ++i) {
+                    for (;  end <= &pointer[size]; ++i) {
                         pointer[i] = *end;
-                        std::cout << "()()"<<pointer[i]<<"  "<<i << std::endl;
-                     
                         end++;
                     }
                 }
@@ -289,6 +298,62 @@ private:
 
 };
 
+template<
+    class T,
+    class Container = Vector<T>
+> class stack {
+public:
+
+    stack()  {}
+    stack(size_t size) {
+        Container.reserve(size);
+    }
+    template<class T1>
+    stack(std::initializer_list<T1> value) {
+        for (const T& ob : value) {
+            Container.push_back(ob);
+        }
+    }
+
+    stack(const stack& copy) {
+        this->Container = copy.Container;
+    }
+    stack(stack&& move) {
+        this->Container = std::move(move.Container);
+    }
+
+    stack& operator=(const stack& copy) {
+    }
+    stack& operator=( stack&& move)noexcept {
+        this->Container = std::move(move.Container);
+        return *this;
+    }
+
+    void push(T val) {
+        Container.push_back(val);
+    }
+    T pop() {
+       return (Container.erase(Container.end()));
+    }
+    T back() {
+        return Container.back();
+    }
+    size_t size() {
+        return Container.size();
+    }
+    bool empty() {
+            return Container.empty_();
+    
+    }
+
+    
+
+      
+private:
+ 
+    Vector<T> Container{0};
+};
+
 
 //ДЛЯ проверки роботы
 class debug {
@@ -305,8 +370,21 @@ public:
 int main()
 {
 
+    stack<int> c1;
+    c1.push(1);
+    c1.push(2);
+    c1.push(3);
+    c1.push(4);
+    c1.push(5);
+    stack<int> c2{2,34,5};
+ 
 
 
+
+
+   // int b = 2;
+   // a = 2;
+   
    
     
     
