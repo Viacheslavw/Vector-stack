@@ -345,9 +345,6 @@ public:
             return Container.empty_();
     
     }
-
-    
-
       
 private:
  
@@ -355,7 +352,7 @@ private:
 };
 
 
-//ДЛЯ проверки роботы
+
 class debug {
 public:
     debug() { std::cout << "debug"<<std::endl; }
@@ -369,23 +366,4 @@ public:
 
 int main()
 {
-
-    stack<int> c1;
-    c1.push(1);
-    c1.push(2);
-    c1.push(3);
-    c1.push(4);
-    c1.push(5);
-    stack<int> c2{2,34,5};
- 
-
-
-
-
-   // int b = 2;
-   // a = 2;
-   
-   
-    
-    
 }
