@@ -1,4 +1,4 @@
-﻿// vector.cpp 
+// vector.cpp  + stack
 #include <iostream>
 
 
